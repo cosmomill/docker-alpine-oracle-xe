@@ -11,8 +11,19 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 
 # set variables
 APEX_VERSION="5.1.1"
-APEX_DOWNLOAD_URL=$1
 ORACLE_BASE="/u01/app/oracle"
+
+# check existence of input argument
+if [ -z "$1" ]; then
+	echo "Usage: $0 apex_$APEX_VERSION.zip"
+	exit 1;
+fi
+
+# check if file exists
+if [ ! -f $1 ]; then
+	echo "$1 does not exist."
+	exit 1;
+fi
 
 # uninstall APEX 4
 cd $ORACLE_HOME/apex
@@ -26,10 +37,11 @@ find -maxdepth 1 -type d -not -name "images" -not -name "." -exec rm -rf {} \;
 find -type f -exec rm -r {} \;
 
 # download and extract APEX 5
-curl -f#L $APEX_DOWNLOAD_URL | bsdtar -xf- -C /tmp
+bsdtar -xf $1 -C /tmp
 # "mv" doesn't work cause image directory is persistent (volume)
 cp -r /tmp/apex $ORACLE_HOME
 rm -rf /tmp/apex
+rm -f $1
 chown -R oracle:dba $ORACLE_HOME/apex
 chmod 755 $ORACLE_HOME/apex
 find $ORACLE_HOME/apex -type d -exec chmod 755 {} \;

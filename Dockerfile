@@ -5,9 +5,6 @@ MAINTAINER Rene Kanzler, me at renekanzler dot com
 # add bash to make sure our scripts will run smoothly
 RUN apk --update add --no-cache bash
 
-# grab curl to download installation files
-RUN apk --update add --no-cache curl ca-certificates
-
 # install bsdtar
 RUN apk --update add --no-cache libarchive-tools
 
