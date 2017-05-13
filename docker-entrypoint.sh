@@ -167,28 +167,6 @@ EOF"
       exit;
 EOF"
 
-	# auto generate APPLICATIONS password if not passed on
-	APPLICATIONS_PWD=${APPLICATIONS_PWD:-"`tr -dc A-Za-z0-9 < /dev/urandom | head -c8`"}
-	# create schema for applications
-	su -s /bin/bash oracle -c "sqlplus -S / as sysdba <<EOF
-      create tablespace APPLICATIONS datafile '$ORACLE_BASE/oradata/$ORACLE_SID/applications.dbf' size 10m autoextend on next 1m maxsize unlimited;
-      create user APPLICATIONS
-      identified by \"$APPLICATIONS_PWD\"
-      default tablespace APPLICATIONS
-      temporary tablespace TEMP
-      quota unlimited on APPLICATIONS;
-      grant create session to APPLICATIONS;
-      grant create table to APPLICATIONS;
-      grant create view to APPLICATIONS;
-      grant create sequence to APPLICATIONS;
-      grant create procedure to APPLICATIONS;
-      grant create trigger to APPLICATIONS;
-      grant create type to APPLICATIONS;
-      grant create operator to APPLICATIONS;
-      grant create indextype to APPLICATIONS;
-      exit;
-EOF"
-
 	# move database operational files to oradata
 	moveFiles;
 
@@ -197,12 +175,6 @@ EOF"
 	echo -n $SYSDBA_PWD > $SYSDBA_PWD_FILE
 	chmod 600 $SYSDBA_PWD_FILE
 	chown root:root $SYSDBA_PWD_FILE
-
-	# store APPLICATIONS password 
-	APPLICATIONS_PWD_FILE=$ORACLE_BASE/oradata/dbconfig/$ORACLE_SID/.applications.passwd
-	echo -n $APPLICATIONS_PWD > $APPLICATIONS_PWD_FILE
-	chmod 600 $APPLICATIONS_PWD_FILE
-	chown root:root $APPLICATIONS_PWD_FILE
 }
 
 # MAIN
