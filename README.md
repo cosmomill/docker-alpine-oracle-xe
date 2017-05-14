@@ -6,9 +6,9 @@ This image is based on Alpine GNU C library image ([cosmomill/alpine-glibc](http
 Prerequisites
 -------------
 
-If you want to build this image, you will need to download [Oracle Database 11g Release 2 Express Edition for Linux x64](http://www.oracle.com/technetwork/database/database-technologies/express-edition/downloads/index.html).
-Oracle Database 11g Release 2 Express Edition requires Docker 1.10.0 and above. *(Docker supports --shm-size since Docker 1.10.0)*
-Oracle Database 11g Release 2 Express Edition uses shared memory for MEMORY_TARGET and needs at least 1 GB.
+- If you want to build this image, you will need to download [Oracle Database 11g Release 2 Express Edition for Linux x64](http://www.oracle.com/technetwork/database/database-technologies/express-edition/downloads/index.html).
+- Oracle Database 11g Release 2 Express Edition requires Docker 1.10.0 and above. *(Docker supports ```--shm-size``` since Docker 1.10.0)*
+- Oracle Database 11g Release 2 Express Edition uses shared memory for MEMORY_TARGET and needs at least 1 GB.
 
 Usage Example
 -------------
@@ -20,6 +20,9 @@ FROM cosmomill/alpine-oracle-xe
 
 # Optional, auto import of sh, sql and dmp files at first startup
 ADD my_schema.sql /docker-entrypoint-initdb.d/
+
+# Optional, add required file for APEX update
+ADD apex_5.1.1.zip /tmp/
 ```
 
 ```sh
@@ -34,3 +37,18 @@ Connect to database
 -------------------
 
 Auto generated passwords are stored in separate hidden files in ```/u01/app/oracle/oradata/dbconfig/XE``` with the naming system ```.username.passwd```.
+
+Upgrade APEX to v5.1.1
+----------------------
+
+If you want to upgrade to APEX v5.1.1, you will need to download [Oracle Application Express 5.1.1 - All languages](http://www.oracle.com/technetwork/developer-tools/apex/downloads/index.html) and add ```apex_5.1.1.zip``` to your image. *(See usage example above)*
+
+**The upgrade script will uninstall APEX 4.0.2 from Oracle Database 11g Express Edition. Before continuing, backup all APEX applications.**
+
+Next, execute ```docker-apex-update.sh``` on the container.
+
+```sh
+docker exec -it my_app docker-apex-update.sh /tmp/apex_5.1.1.zip
+```
+
+Setup a [Alpine Oracle REST Data Services](https://hub.docker.com/r/cosmomill/alpine-ords-apex/) container.
