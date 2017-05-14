@@ -27,7 +27,7 @@ ONBUILD ADD $ORACLE_RPM /tmp/
 ONBUILD RUN bsdtar -C /tmp -xf /tmp/oracle-xe-$ORACLE_VERSION.x86_64.rpm.zip && bsdtar -C / -xf /tmp/Disk1/oracle-xe-$ORACLE_VERSION.x86_64.rpm \
 	&& cp /tmp/Disk1/response/xe.rsp /tmp/ \
 	&& rm -rf /tmp/Disk1 \
-	&& rm -f /tmp/*.zip
+	&& rm -f /tmp/oracle-xe-$ORACLE_VERSION.x86_64.rpm.zip
 
 # add Oracle user and group
 ONBUILD RUN addgroup dba && adduser -D -G dba -h /u01/app/oracle -s /bin/false oracle
