@@ -63,11 +63,33 @@ echo
 grep ORA- *.log
 grep PLS- *.log
 
+# APEX configurations
+su -s /bin/bash oracle -c "sqlplus -S / as sysdba <<EOF
+  -- enable ORDS as the print server so PDF printing works out of the box
+  exec apex_instance_admin.set_parameter('PRINT_BIB_LICENSED', 'APEX_LISTENER');
+  -- disable the default set of strong complexity rules for ADMIN password
+  exec apex_instance_admin.set_parameter(p_parameter => 'STRONG_SITE_ADMIN_PASSWORD', p_value => 'N');
+  -- exec apex_instance_admin.set_parameter(p_parameter => 'WORKSPACE_PROVISION_DEMO_OBJECTS', p_value => 'N');
+  -- exec apex_instance_admin.set_parameter(p_parameter => 'WORKSPACE_WEBSHEET_OBJECTS', p_value => 'N');
+
+  -- APEX SMTP setup
+  -- exec apex_instance_admin.set_parameter(p_parameter => 'SMTP_HOST_ADDRESS', p_value => '');
+  -- exec apex_instance_admin.set_parameter(p_parameter => 'SMTP_HOST_PORT', p_value => '');
+  -- exec apex_instance_admin.set_parameter(p_parameter => 'SMTP_USERNAME', p_value => '');
+  -- exec apex_instance_admin.set_parameter(p_parameter => 'SMTP_PASSWORD', p_value => '');
+  -- exec apex_instance_admin.set_parameter(p_parameter => 'SMTP_TLS_MODE', p_value => 'Y');
+
+  -- Oracle Wallet (required for SSL connections)
+  -- exec apex_instance_admin.set_parameter(p_parameter => 'WALLET_PATH', p_value => '');
+  -- exec apex_instance_admin.set_parameter(p_parameter => 'WALLET_PWD', p_value => '');
+  exit;
+EOF"
+
 # need to remove the "HIDE" from the accept statement or else the << EOF1 doesn't work
 sed -i 's/password \[\] " HIDE/password \[\] "/g' $ORACLE_HOME/apex/apxchpwd.sql
 
 # set password and disable XDB HTTP and FTP listener
-APEX_ADMIN_PWD=${APEX_ADMIN_PWD:-"`cat /dev/urandom | tr -dc 'a-zA-Z0-9!#$%&()*+,-/:;?_' | fold -w 10 | grep -i '[!#$%&()*+,-/:;?_]' | grep '[0-9]' | grep '[a-z]' | grep '[A-Z]' | head -n 1`"}
+APEX_ADMIN_PWD=${APEX_ADMIN_PWD:-"`tr -dc A-Za-z0-9 < /dev/urandom | head -c8`"}
 APEX_ADMIN_PWD_FILE=$ORACLE_BASE/oradata/dbconfig/$ORACLE_SID/.apex_admin.passwd
 echo -n $APEX_ADMIN_PWD > $APEX_ADMIN_PWD_FILE
 chmod 600 $APEX_ADMIN_PWD_FILE
