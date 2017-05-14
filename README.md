@@ -48,7 +48,7 @@ If you want to upgrade to APEX v5.1.1, you will need to download [Oracle Applica
 Next, execute ```docker-apex-update.sh``` on the container.
 
 ```sh
-docker exec -it my_app docker-apex-update.sh /tmp/apex_5.1.1.zip
+$ docker exec -it my_app docker-apex-update.sh /tmp/apex_5.1.1.zip
 ```
 
 Setup a [Alpine Oracle REST Data Services](https://hub.docker.com/r/cosmomill/alpine-ords-apex/) container.
