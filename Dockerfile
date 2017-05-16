@@ -64,9 +64,9 @@ RUN echo "alias conndba='su -s \"/bin/bash\" oracle -c \"sqlplus / as sysdba\"'"
 # define mountable directories
 ONBUILD VOLUME $ORACLE_BASE/oradata $ORACLE_HOME/apex/images
 
-ENV PROCESSES=500
-ENV SESSIONS=555
-ENV TRANSACTIONS=610
+ENV PROCESSES 500
+ENV SESSIONS 555
+ENV TRANSACTIONS 610
 
 COPY docker-apex-update.sh /usr/local/bin/
 COPY docker-entrypoint.sh /usr/local/bin/

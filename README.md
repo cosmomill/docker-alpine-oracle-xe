@@ -33,6 +33,15 @@ $ docker build -t my_app . --build-arg ORACLE_RPM="oracle-xe-11.2.0-1.0.x86_64.r
 $ docker run -d -P --shm-size=1g -v db_data:/u01/app/oracle/oradata -v apex_images:/u01/app/oracle/product/11.2.0/xe/apex/images -p 1521:1521 -p 8080:8080 my_app
 ```
 
+The default list of ENV variables is:
+
+```
+DATABASE_HOSTNAME=localhost
+PROCESSES=500
+SESSIONS=555
+TRANSACTIONS=610
+```
+
 Connect to database
 -------------------
 
