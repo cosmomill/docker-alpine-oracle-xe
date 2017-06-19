@@ -36,7 +36,6 @@ $ docker run -d -P --shm-size=1g -v db_data:/u01/app/oracle/oradata -v apex_imag
 The default list of ENV variables is:
 
 ```
-DATABASE_HOSTNAME=localhost
 PROCESSES=500
 SESSIONS=555
 TRANSACTIONS=610
