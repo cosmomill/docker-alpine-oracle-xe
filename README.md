@@ -22,7 +22,7 @@ FROM cosmomill/alpine-oracle-xe
 ADD my_schema.sql /docker-entrypoint-initdb.d/
 
 # Optional, add required file for APEX update
-ADD apex_5.1.1.zip /tmp/
+ADD apex_18.1.zip /tmp/
 ```
 
 ```sh
@@ -46,17 +46,17 @@ Connect to database
 
 Auto generated passwords are stored in separate hidden files in ```/u01/app/oracle/oradata/dbconfig/XE``` with the naming system ```.username.passwd```.
 
-Upgrade APEX to v5.1.1
+Upgrade APEX to v18.1
 ----------------------
 
-If you want to upgrade to APEX v5.1.1, you will need to download [Oracle Application Express 5.1.1 - All languages](http://www.oracle.com/technetwork/developer-tools/apex/downloads/index.html) and add ```apex_5.1.1.zip``` to your image. *(See usage example above)*
+If you want to upgrade to APEX v18.1, you will need to download [Oracle Application Express 18.1 - All languages](http://www.oracle.com/technetwork/developer-tools/apex/downloads/index.html) and add ```apex_18.1.zip``` to your image. *(See usage example above)*
 
 **The upgrade script will uninstall APEX 4.0.2 from Oracle Database 11g Express Edition. Before continuing, backup all APEX applications.**
 
 Next, execute ```docker-apex-update.sh``` on the container.
 
 ```sh
-$ docker exec -it my_app docker-apex-update.sh /tmp/apex_5.1.1.zip
+$ docker exec -it my_app docker-apex-update.sh /tmp/apex_18.1.zip
 ```
 
 Setup a [Alpine Oracle REST Data Services](https://hub.docker.com/r/cosmomill/alpine-ords-apex/) container.

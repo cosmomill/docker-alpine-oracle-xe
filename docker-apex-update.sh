@@ -10,12 +10,18 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 
 
 # set variables
-APEX_VERSION="5.1.1"
+APEX_VERSION="18.1"
 ORACLE_BASE="/u01/app/oracle"
 
 # check existence of input argument
 if [ -z "$1" ]; then
 	echo "Usage: $0 apex_$APEX_VERSION.zip"
+	exit 1;
+fi
+
+# check if absolute was entered
+if [[ ! "$1" = /* ]]; then
+	echo "Please specify an absolute path for $1."
 	exit 1;
 fi
 
