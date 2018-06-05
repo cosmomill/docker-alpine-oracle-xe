@@ -42,7 +42,7 @@ cp -rp $ORACLE_HOME/apex $ORACLE_HOME/apex_4.0.2
 find -maxdepth 1 -type d -not -name "images" -not -name "." -exec rm -rf {} \;
 find -type f -exec rm -r {} \;
 
-# download and extract APEX 5
+# download and extract APEX
 bsdtar -xf $1 -C /tmp
 # "mv" doesn't work cause image directory is persistent (volume)
 cp -r /tmp/apex $ORACLE_HOME
@@ -170,5 +170,10 @@ su -s /bin/bash oracle -c "sqlplus -S / as sysdba <<EOF
   exit;
 EOF"
 
+# remember the installed APEX version
+APEX_UPDATE_FILE=$ORACLE_BASE/oradata/dbconfig/$ORACLE_SID/.apex_version
+echo -n $APEX_VERSION > $APEX_UPDATE_FILE
+chmod 600 $APEX_UPDATE_FILE
+chown root:root $APEX_UPDATE_FILE
 
 fi;
