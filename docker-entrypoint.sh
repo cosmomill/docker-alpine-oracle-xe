@@ -133,6 +133,9 @@ function createDB {
 \
 " > $ORACLE_HOME/network/admin/listener.ora
 
+	# update tnsnames.ora to use localhost instead of the current hostname
+	sed -i -r "s/\(HOST = [^)]+/\(HOST = localhost/" $ORACLE_BASE/oradata/dbconfig/$ORACLE_SID/tnsnames.ora
+
 	echo "DEDICATED_THROUGH_BROKER_LISTENER=ON"  >> $ORACLE_HOME/network/admin/listener.ora && \
 	echo "DIAG_ADR_ENABLED=OFF"  >> $ORACLE_HOME/network/admin/listener.ora;
 	chown -R oracle:dba $ORACLE_HOME/network/admin/listener.ora
